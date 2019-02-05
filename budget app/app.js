@@ -44,6 +44,10 @@ var budgetController = (function() {
            return newItem; //other module will get direct acess to this item
         },
 
+        testing: function() {
+            console.log(data);
+        }
+
     }
 
     
@@ -68,7 +72,7 @@ var UIController = (function(){
             return {
                 type: document.querySelector(DOMstrings.inputType).value, //Will be either inc or exp
                 description: document.querySelector(DOMstrings.inputDescription).value,
-                value: document.querySelector(DOMstrings.inputValue).value
+                value: parseFloat(document.querySelector(DOMstrings.inputValue).value)// transform a string not a number
             }; 
         },
 
@@ -130,24 +134,33 @@ var controller = (function(budgetCtrl, UIctrl){
         });
 
     }
+
+    var updateBudget = function() {
+        // 1.calculate the budget
+
+        // 2. return the budget
+
+        // 3.display the budget on the UI
+    }
    
     var ctrlAddItem = function() {
         var input, newItem;
         // 1. get the input data
         input = UIctrl.getInput();
-        console.log(input);
-        //2. add the item to the budget controller
-        newItem = budgetCtrl.addItem(input.type, input.description, input.value);
+    
+        if (input.description != '' && !isNaN(input.value) && input.value > 0) {
+            //2. add the item to the budget controller
+            newItem = budgetCtrl.addItem(input.type, input.description, input.value);
 
-        //3. add the item to the UI controller
-        UIctrl.addListItem(newItem, input.type);
+            //3. add the item to the UI controller
+            UIctrl.addListItem(newItem, input.type);
 
-        //4.clear the fields
-        UIctrl.clearFields();
-        
-        //5.calculate the budget
-
-        //6.display the budget on the UI
+            //4.clear the fields
+            UIctrl.clearFields();
+            
+            //5. Calucluate and update budget
+            updateBudget();
+        }
         
     }
 
