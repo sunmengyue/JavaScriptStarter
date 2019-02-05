@@ -12,6 +12,15 @@ var budgetController = (function() {
         this.value = value;
     }
 
+    var calculateTotal = function(type) {
+        var sum = 0;
+        data.allItems[type].forEach(function(cur){
+            sum += cur.value;
+        });
+        data.totals[type] = sum;
+        
+    };
+
     var data = {
         allItems: {
             exp: [],
@@ -21,7 +30,12 @@ var budgetController = (function() {
         totals: {
             exp:0,
             inc:0
-        }
+        },
+        
+        budget: 0,
+
+        percentage: -1 //represent something does not exist
+
     };
 
     return {
@@ -33,7 +47,6 @@ var budgetController = (function() {
            } else {
                ID = 0;
            }
-          
             
            if (type === 'exp') {
                 newItem = new Expense(ID, des, val);
@@ -43,6 +56,35 @@ var budgetController = (function() {
            data.allItems[type].push(newItem);
            return newItem; //other module will get direct acess to this item
         },
+
+        calculateBudget: function() {
+
+            // calculate total income and expenses
+           calculateTotal('exp');
+           calculateTotal('inc');
+
+            //calculate the budget: income - expenses
+            data.budget = data.totals.inc - data.totals.exp;
+
+            //calculate the percentage of income we spent: expenses / income
+            if (data.totals.inc > 0) {
+                data.percentage = Math.round((data.totals.exp / data.totals.inc) * 100);
+            } else {
+                data.percentage = -1;
+            }
+            
+        },
+
+        getBudget: function() {
+            return {
+                budget: data.budget,
+                totalExp: data.totals.exp,
+                totalInc: data.totals.inc,
+                percentage: data.percentage
+
+            };
+        },
+
 
         testing: function() {
             console.log(data);
@@ -120,9 +162,7 @@ var UIController = (function(){
 })();
 
 
-
-
-//global app controller (central controller)
+//Global app controller (central controller)
 var controller = (function(budgetCtrl, UIctrl){
     var setupEventListeners = function() {
         var DOM = UIctrl.getDOMstrings();
@@ -137,10 +177,13 @@ var controller = (function(budgetCtrl, UIctrl){
 
     var updateBudget = function() {
         // 1.calculate the budget
+        budgetCtrl.calculateBudget();
 
         // 2. return the budget
+        var budget = budgetCtrl.getBudget();
 
         // 3.display the budget on the UI
+        console.log(budget);
     }
    
     var ctrlAddItem = function() {
