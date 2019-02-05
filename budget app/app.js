@@ -97,7 +97,10 @@ var UIController = (function(){
             var fields, fieldsArr  ; 
             fields = document.querySelectorAll(DOMstrings.inputDescription + ', ' + DOMstrings.inputValue);
 
-            var fieldsArr = Array.prototype.slice.call(fields);
+            //The querySelectAll returns a list, so we need to convert the list into an array
+            //The slice method returns an array.
+            //We cannot call fields.slice() because fields is not an array object. We 
+            var fieldsArr = Array.prototype.slice.call(fields); 
 
             fieldsArr.forEach(function(current, index, arr) {
                 current.value = "";
