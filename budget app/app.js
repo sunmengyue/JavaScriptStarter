@@ -182,7 +182,7 @@ var UIController = (function(){
 //Global app controller (central controller)
 var controller = (function(budgetCtrl, UIctrl){
     var setupEventListeners = function() {
-        var DOM = UIctrl.getDOMstrings();
+        var DOM = UIctrl.getDOMstrings(); 
         document.querySelector(DOM.inputBtn).addEventListener('click', ctrlAddItem);
         document.addEventListener('keypress', function(event){
             if (event.keyCode === 13 | event.which === 13) {
@@ -190,7 +190,7 @@ var controller = (function(budgetCtrl, UIctrl){
             }
         });
         document.querySelector(DOM.container).addEventListener('click', ctrlDeleteItem); //event delegation
-    }
+    } //Note to use DOM not DOMstrings
 
     
 
