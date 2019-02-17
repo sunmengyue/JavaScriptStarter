@@ -57,6 +57,26 @@ var budgetController = (function() {
            return newItem; //other module will get direct acess to this item
         },
 
+        deleteItem: function(type, id) {
+            var ids, index;
+            //example: id = 6
+            //ids = [1 2 4 6 8];
+            //if we want to delet 6, the index is 3
+
+            ids = data.allItems[type].map(function(curr){
+                return curr.id; //map loops over and returns the whole current array
+            })
+
+            index = ids.indexOf(id);
+            if (index !== -1) {
+                data.allItems[type].splice(index, 1);
+            }
+
+
+
+        },
+
+
         calculateBudget: function() {
 
             // calculate total income and expenses
@@ -234,10 +254,11 @@ var controller = (function(budgetCtrl, UIctrl){
             //inc-1
             splitID = itemID.split('-'); //return an array
             type = splitID[0];
-            ID = splitID[1];
+            ID = parseInt(splitID[1]);
+            
 
             //1. Delete the item from the data structure
-
+            budgetController.deleteItem(type, ID);
             //2. Delete the item from the UI
 
             //3. Update and show the budget
