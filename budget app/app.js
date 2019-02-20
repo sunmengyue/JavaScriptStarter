@@ -155,7 +155,8 @@ var UIController = (function(){
         incomeLable: '.budget__income--value',
         expensesLable: '.budget__expenses--value',
         percentageLable: '.budget__expenses--percentage',
-        container: '.container'
+        container: '.container',
+        expensePercLable: '.item__percentage'
     };
 
 
@@ -221,6 +222,26 @@ var UIController = (function(){
             }
         },
         
+        displayPercentages: function(percentages) {
+            var fields = document.querySelectorAll(DOMstrings.expensePercLable); //returns a node list wich does not have forEach method
+            
+            var nodeListForEach = function(list, callback) {
+                for (var i = 0; i < list.length; i++) {
+                    callback(list[i], i);
+                }
+            }
+
+            nodeListForEach(fields, function(current, index){
+                if (percentages[index] > 0) {
+                    current.textContent = percentages[index] + '%';
+                } else {
+                    current.textContent = '---';
+                }
+                
+            });
+        
+        },
+
         getDOMstrings: function(){
             return DOMstrings;
         }
@@ -263,7 +284,7 @@ var controller = (function(budgetCtrl, UIctrl){
         var percentages = budgetCtrl.getPercentages();
 
         // 3. Update the percentages
-        console.log(percentages);
+        UIctrl.displayPercentages(percentages);
     }
    
     var ctrlAddItem = function() {
